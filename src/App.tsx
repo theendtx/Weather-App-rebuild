@@ -1,14 +1,20 @@
+import { useState } from "react";
+
 import Header from "./components/Header";
 import SearchInput from "./components/SearchInput";
 import WeatherCard from "./components/WeatherCard";
 
 function App() {
+    const [city, setCity] = useState<string>("");
+
     return (
         <>
           <Header />
-          <SearchInput />
+          <SearchInput
+           city={city}
+           setCity={setCity} />
           <WeatherCard
-           city="Almaty"
+           city={city}
            temp={23}
           />
         </>
