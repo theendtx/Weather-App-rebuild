@@ -1,9 +1,18 @@
+import Header from "./components/Header";
+import SearchInput from "./components/SearchInput";
+import WeatherCard from "./components/WeatherCard";
+
 function App() {
     return (
-        <div>
-            <h1>Hello Weather App</h1>
-        </div>
-    )
+        <>
+          <Header />
+          <SearchInput />
+          <WeatherCard
+           city="Almaty"
+           temp={23}
+          />
+        </>
+    );
 }
 
-export default App
+export default App;
