@@ -7,12 +7,30 @@ import WeatherCard from "./components/WeatherCard";
 function App() {
     const [city, setCity] = useState<any>(null);
     const [weather, setWeather] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     async function fetchWeather() {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric`);
-        
-        const data = await response.json();
+        try {
 
-        setWeather(data);
+            setLoading(true);
+            setError("");
+
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric`);
+        
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            setWeather(data);
+
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+        
     }
 
     return (
@@ -29,6 +47,8 @@ function App() {
 
           <WeatherCard
            weather={weather}
+           loading={loading}
+           error={error}
           />
         </>
     );
