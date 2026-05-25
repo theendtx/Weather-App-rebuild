@@ -1,3 +1,7 @@
+import Loader from './ui/Loader';
+import ErrorMessage from './ui/ErrorMessage';
+import Card from './ui/Card';
+
 type Props={
     weather: any;
     loading: boolean;
@@ -9,16 +13,16 @@ function WeatherCard({ weather, loading, error }: Props) {
         return(<p>Empty data</p>)
     }
 
-    if (loading) return <p>Loading...</p>
-    if (error) return <p>{error}</p>
+    if (loading) return <Loader />
+    if (error) return <ErrorMessage message={error}/>
 
 
     return (
-        <div>
+        <Card>
             <h2>{weather?.name}</h2>
             <p>{weather?.main?.temp}</p>
             <p>{weather?.weather?.[0]?.description}</p>
-        </div>
+        </Card>
     )
 }
 
