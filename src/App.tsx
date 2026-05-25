@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Header from "./components/Header";
 import SearchInput from "./components/SearchInput";
@@ -32,6 +32,18 @@ function App() {
         }
         
     }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (city) {
+                fetchWeather();
+            }
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [city]);
 
     return (
         <>
