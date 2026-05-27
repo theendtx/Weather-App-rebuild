@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import SearchInput from "./components/SearchInput";
 import WeatherCard from "./components/WeatherCard";
 import ForecastList from "./components/ForecastList";
+import  FavoritesList  from "./components/FavoritesList";
 
 function App() {
     const [city, setCity] = useState<any>(null);
@@ -11,6 +12,23 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [forecast, setForecast] = useState<any>([]);
+    const [favorites, setFavorites] = useState<string[]>([]);
+
+    function toggleFavorite(){
+        if (favorites.includes(city)){
+            setFavorites(
+                favorites.filter(
+                    item =>
+                        item !== city
+                )
+            );
+        } else {
+            setFavorites(
+                [...favorites, city]
+            );
+        }
+    }
+
     async function fetchWeather() {
         try {
 
@@ -66,9 +84,17 @@ setForecast(
            city={city}
            setCity={setCity} />
 
+           <button onClick={toggleFavorite}>
+            favorite
+           </button>
+
            <button
            onClick={fetchWeather}
            >Search</button>
+
+           <FavoritesList
+           favorites={favorites}
+           />
 
           <WeatherCard
            weather={weather}
