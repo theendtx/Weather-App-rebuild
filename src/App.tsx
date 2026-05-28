@@ -76,6 +76,21 @@ setForecast(
         };
     }, [city]);
 
+    useEffect(() => {
+        localStorage.setItem(
+            "favorites",
+            JSON.stringify(favorites)
+        );
+    }, [favorites])
+
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem("favorites");
+
+        if (savedFavorites) {
+            setFavorites(JSON.parse(savedFavorites));
+        }
+    }, []);
+
     return (
         <>
           <Header />
