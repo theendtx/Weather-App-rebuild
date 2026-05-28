@@ -1,37 +1,30 @@
+type Props = {
+  favorites:string[]
+}
+
 function FavoritesList({
+  favorites
+}:Props){
 
- favorites
+  return(
 
-}:{
+    <div>
 
- favorites:string[]
+      <h3>
+        Favorites
+      </h3>
 
-}){
+      {favorites.map(city => (
 
- return(
+        <p key={city}>
+          {city}
+        </p>
 
- <div>
+      ))}
 
- {
+    </div>
 
- favorites.map(
- city=>(
-
-  <p
-   key={city}
-  >
-
-   {city}
-
-  </p>
-
- ))
-
- }
-
- </div>
-
- )
+  )
 
 }
 

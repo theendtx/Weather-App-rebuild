@@ -5,14 +5,20 @@ import SearchInput from "./components/SearchInput";
 import WeatherCard from "./components/WeatherCard";
 import ForecastList from "./components/ForecastList";
 import  FavoritesList  from "./components/FavoritesList";
+import RecentSearches from "./components/RecentSearches";
 
 function App() {
-    const [city, setCity] = useState<any>(null);
+    const [city, setCity] = useState("");
     const [weather, setWeather] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [forecast, setForecast] = useState<any>([]);
-    const [favorites, setFavorites] = useState<string[]>([]);
+    const [recentSearches, setRecentSearches] = useState<string[]>([]);
+    const [favorites, setFavorites] = useState<string[]>(() => {
+        const savedFavorites = localStorage.getItem("favorites");
+
+        return savedFavorites ? JSON.parse(savedFavorites) : [];
+    });
 
     function toggleFavorite(){
         if (favorites.includes(city)){
@@ -61,6 +67,14 @@ setForecast(
         } finally {
             setLoading(false);
         }
+
+        setRecentSearches(prev => {
+            if (prev.includes(city)){
+                return prev;
+            }
+
+            return [city, ...prev].slice(0,5);
+        });
         
     }
 
@@ -82,14 +96,6 @@ setForecast(
             JSON.stringify(favorites)
         );
     }, [favorites])
-
-    useEffect(() => {
-        const savedFavorites = localStorage.getItem("favorites");
-
-        if (savedFavorites) {
-            setFavorites(JSON.parse(savedFavorites));
-        }
-    }, []);
 
     return (
         <>
@@ -116,6 +122,9 @@ setForecast(
            loading={loading}
            error={error}
           />
+
+          <RecentSearches 
+          searches={recentSearches}/>
 
           <ForecastList
           forecast={forecast}/>
