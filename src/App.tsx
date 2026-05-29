@@ -1,4 +1,10 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import FavoritesPage from "./pages/FavoritesPage";
+import CityPage from "./pages/CityPage";
 
 import Header from "./components/Header";
 import SearchInput from "./components/SearchInput";
@@ -98,7 +104,30 @@ setForecast(
     }, [favorites])
 
     return (
+        
         <>
+
+        <BrowserRouter>
+          <Routes>
+
+            <Route path="/" element={<HomePage />} />
+
+            <Route path="/favorites" element={<FavoritesPage />} />
+
+            <Route path="/city/:name" element={<CityPage />} />
+
+          </Routes>
+
+          <Link to="/">Home</Link>
+
+        <Link to="/favorites">Favorites</Link>
+
+        <Link to="/city">City</Link>
+
+        </BrowserRouter>
+
+        
+
           <Header />
 
           <SearchInput
