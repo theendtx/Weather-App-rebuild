@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+import type { Weather } from "./types/weather";
+import type { ForecastItem } from "./types/forecast";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -15,10 +17,10 @@ import RecentSearches from "./components/RecentSearches";
 
 function App() {
     const [city, setCity] = useState("");
-    const [weather, setWeather] = useState<any>(null);
+    const [weather, setWeather] = useState<Weather | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [forecast, setForecast] = useState<any>([]);
+    const [forecast, setForecast] = useState<ForecastItem[]>([]);
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [favorites, setFavorites] = useState<string[]>(() => {
         const savedFavorites = localStorage.getItem("favorites");

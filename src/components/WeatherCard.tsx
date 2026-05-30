@@ -1,9 +1,10 @@
 import Loader from './ui/Loader';
 import ErrorMessage from './ui/ErrorMessage';
 import Card from './ui/Card';
+import type { Weather } from "../types/weather";
 
 type Props={
-    weather: any;
+    weather: Weather | null ;
     loading: boolean;
     error: string;
 };
