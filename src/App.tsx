@@ -14,12 +14,11 @@ import WeatherCard from "./components/WeatherCard";
 import ForecastList from "./components/ForecastList";
 import  FavoritesList  from "./components/FavoritesList";
 import RecentSearches from "./components/RecentSearches";
+import { useWeather } from "./hooks/useWeather";
 
 function App() {
     const [city, setCity] = useState("");
-    const [weather, setWeather] = useState<Weather | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const { weather, loading, error } = useWeather();
     const [forecast, setForecast] = useState<ForecastItem[]>([]);
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [favorites, setFavorites] = useState<string[]>(() => {
