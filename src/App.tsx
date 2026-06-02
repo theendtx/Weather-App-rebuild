@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
-import type { Weather } from "./types/weather";
-import type { ForecastItem } from "./types/forecast";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -18,9 +16,22 @@ import { useWeather } from "./hooks/useWeather";
 
 function App() {
     const [city, setCity] = useState("");
-    const { weather, loading, error } = useWeather();
-    const [forecast, setForecast] = useState<ForecastItem[]>([]);
-    const [recentSearches, setRecentSearches] = useState<string[]>([]);
+   const {
+  weather,
+  setWeather,
+
+  loading,
+  setLoading,
+
+  error,
+  setError,
+
+  forecast,
+  setForecast,
+
+  recentSearches,
+  setRecentSearches
+} = useWeather();
     const [favorites, setFavorites] = useState<string[]>(() => {
         const savedFavorites = localStorage.getItem("favorites");
 
@@ -42,48 +53,43 @@ function App() {
         }
     }
 
-    async function fetchWeather() {
-        try {
+   async function fetchWeather() {
+  try {
+    setLoading(true);
+    setError("");
 
-            setLoading(true);
-            setError("");
+    const response = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric`
+    );
 
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric`);
-        
-            const data = await response.json();
+    const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.message);
-            }
-            const dailyForecast =
- data.list.filter(
-  (item:any) =>
-   item.dt_txt.includes(
-    "12:00:00"
-   )
- ).slice(0,5);
-
-setForecast(
- dailyForecast
-);
-
-            setWeather(data);
-
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-
-        setRecentSearches(prev => {
-            if (prev.includes(city)){
-                return prev;
-            }
-
-            return [city, ...prev].slice(0,5);
-        });
-        
+    if (!response.ok) {
+      throw new Error(data.message);
     }
+
+    const dailyForecast = data.list
+      .filter((item:any) => item.dt_txt.includes("12:00:00"))
+      .slice(0, 5);
+
+    setForecast(dailyForecast);
+
+    setWeather(data.list[0]);
+
+    setRecentSearches(prev => {
+      if (prev.includes(city)) {
+        return prev;
+      }
+
+      return [city, ...prev].slice(0, 5);
+    });
+
+  } catch (err:any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -144,7 +150,7 @@ setForecast(
            >Search</button>
 
            <FavoritesList
-           favorites={favorites}
+           
            />
 
           <WeatherCard

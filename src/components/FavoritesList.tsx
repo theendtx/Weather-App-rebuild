@@ -1,10 +1,9 @@
-type Props = {
-  favorites:string[]
-}
+import { useContext } from "react";
+import { FavoritesContext } from "../context/FavoritesContext";
 
-function FavoritesList({
-  favorites
-}:Props){
+function FavoritesList(){
+
+  const favorites = useContext(FavoritesContext);
 
   return(
 
