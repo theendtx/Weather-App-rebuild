@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { FavoritesContext } from "../context/FavoritesContext";
+
+import { useWeatherStore } from "../store/weatherStore";
 
 function FavoritesList(){
 
-  const favorites = useContext(FavoritesContext);
+  const favorites = useWeatherStore(state => state.favorites);
 
   return(
 

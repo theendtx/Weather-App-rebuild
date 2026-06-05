@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useWeatherStore } from "./store/weatherStore";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -32,25 +33,12 @@ function App() {
   recentSearches,
   setRecentSearches
 } = useWeather();
-    const [favorites, setFavorites] = useState<string[]>(() => {
-        const savedFavorites = localStorage.getItem("favorites");
+    const favorites = useWeatherStore(state => state.favorites);
 
-        return savedFavorites ? JSON.parse(savedFavorites) : [];
-    });
+    const addFavorite = useWeatherStore(state => state.addFavorite);
 
     function toggleFavorite(){
-        if (favorites.includes(city)){
-            setFavorites(
-                favorites.filter(
-                    item =>
-                        item !== city
-                )
-            );
-        } else {
-            setFavorites(
-                [...favorites, city]
-            );
-        }
+        addFavorite(city);
     }
 
    async function fetchWeather() {
