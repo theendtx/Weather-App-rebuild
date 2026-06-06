@@ -15,26 +15,19 @@ import WeatherCard from "./components/WeatherCard";
 import ForecastList from "./components/ForecastList";
 import  FavoritesList  from "./components/FavoritesList";
 import RecentSearches from "./components/RecentSearches";
-import { useWeather } from "./hooks/useWeather";
 
 function App() {
-    const [city, setCity] = useState("");
-   const {
-  weather,
-  setWeather,
+    const [city ] = useState("");
 
-  loading,
-  setLoading,
+    const recentSearches =
+  useWeatherStore(
+    state => state.recentSearches
+  );
 
-  
-  setError,
-
-  forecast,
-  setForecast,
-
-  recentSearches,
-  setRecentSearches
-} = useWeather();
+const addRecentSearch =
+  useWeatherStore(
+    state => state.addRecentSearch
+  );
 
 const { data, isLoading, error} = useQuery({
   queryKey: ["weather", city],
@@ -45,66 +38,17 @@ const { data, isLoading, error} = useQuery({
 
     const addFavorite = useWeatherStore(state => state.addFavorite);
 
-    function toggleFavorite(){
-        addFavorite(city);
-    }
-
-   async function fetchWeather() {
-  try {
-    setLoading(true);
-    setError("");
-
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${import.meta.env.VITE_API_KEY}&units=metric`
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
-
-    const dailyForecast = data.list
-      .filter((item:any) => item.dt_txt.includes("12:00:00"))
-      .slice(0, 5);
-
-    setForecast(dailyForecast);
-
-    setWeather(data.list[0]);
-
-    setRecentSearches(prev => {
-      if (prev.includes(city)) {
-        return prev;
-      }
-
-      return [city, ...prev].slice(0, 5);
-    });
-
-  } catch (err:any) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
+    function toggleFavorite() {
+  if (!favorites.includes(city)) {
+    addFavorite(city);
   }
 }
-
     useEffect(() => {
-        const timer = setTimeout(() => {
-            if (city) {
-                fetchWeather();
-            }
-        }, 500);
+  if (city) {
+    addRecentSearch(city);
+  }
+}, [city]);
 
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [city]);
-
-    useEffect(() => {
-        localStorage.setItem(
-            "favorites",
-            JSON.stringify(favorites)
-        );
-    }, [favorites])
 
     return (
         
@@ -134,15 +78,13 @@ const { data, isLoading, error} = useQuery({
           <Header />
 
           <SearchInput
-           city={city}
-           setCity={setCity} />
+            />
 
            <button onClick={toggleFavorite}>
             favorite
            </button>
 
            <button
-           onClick={fetchWeather}
            >Search</button>
 
            <FavoritesList
@@ -159,8 +101,15 @@ const { data, isLoading, error} = useQuery({
           searches={recentSearches}/>
 
           <ForecastList
-          forecast={forecast}/>
-        </>
+  forecast={
+    data?.list
+      ?.filter((item:any) =>
+        item.dt_txt.includes("12:00:00")
+      )
+      .slice(0, 5) ?? []
+  } /> </>
+
+
     );
 }
 
