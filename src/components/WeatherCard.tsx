@@ -10,13 +10,9 @@ type Props={
 };
 
 function WeatherCard({ weather, loading, error }: Props) {
-    if (!weather){
-        return(<p>Empty data</p>)
-    }
-
     if (loading) return <Loader />
-    if (error) return <ErrorMessage message={error}/>
-
+if (error) return <ErrorMessage message={error} />
+if (!weather) return <p>Empty data</p>
 
     return (
         <Card>

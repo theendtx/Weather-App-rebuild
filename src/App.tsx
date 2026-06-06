@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useWeatherStore } from "./store/weatherStore";
+import { useQuery } from "@tanstack/react-query";
+import { getWeather } from "./services/weatherService";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -24,7 +26,7 @@ function App() {
   loading,
   setLoading,
 
-  error,
+  
   setError,
 
   forecast,
@@ -33,6 +35,12 @@ function App() {
   recentSearches,
   setRecentSearches
 } = useWeather();
+
+const { data, isLoading, error} = useQuery({
+  queryKey: ["weather", city],
+  queryFn: () => getWeather(city),
+  enabled: !!city
+})
     const favorites = useWeatherStore(state => state.favorites);
 
     const addFavorite = useWeatherStore(state => state.addFavorite);
@@ -142,10 +150,10 @@ function App() {
            />
 
           <WeatherCard
-           weather={weather}
-           loading={loading}
-           error={error}
-          />
+  weather={data}
+  loading={isLoading}
+  error={error?.message ?? ""}
+/>
 
           <RecentSearches 
           searches={recentSearches}/>
