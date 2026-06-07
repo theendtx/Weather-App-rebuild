@@ -15,6 +15,7 @@ import WeatherCard from "./components/WeatherCard";
 import ForecastList from "./components/ForecastList";
 import  FavoritesList  from "./components/FavoritesList";
 import RecentSearches from "./components/RecentSearches";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
     const [city ] = useState("");
@@ -59,7 +60,11 @@ const { data, isLoading, error} = useQuery({
 
             <Route path="/" element={<HomePage />} />
 
-            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/favorites" element={
+              <ProtectedRoute>
+                <FavoritesPage />
+              </ProtectedRoute>
+            } />
 
             <Route path="/city/:name" element={<CityPage />} />
 
