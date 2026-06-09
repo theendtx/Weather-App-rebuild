@@ -7,19 +7,21 @@ function FavoritesList(){
 
   return(
 
-    <div>
+    <div className="mini-panel">
 
-      <h3>
-        Favorites
-      </h3>
+      <h3>Favorites</h3>
 
+      {favorites.length === 0 && <p className="muted-text">No favorites yet</p>}
+
+      <div className="chip-list">
       {favorites.map(city => (
 
-        <p key={city}>
+        <p className="city-chip" key={city}>
           {city}
         </p>
 
       ))}
+      </div>
 
     </div>
 

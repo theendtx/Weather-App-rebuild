@@ -1,5 +1,5 @@
 function HomePage() {
-    return <h1>Home</h1>
+    return <p className="route-badge">Home</p>
 }
 
 export default HomePage;

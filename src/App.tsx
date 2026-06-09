@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useWeatherStore } from "./store/weatherStore";
 import { useQuery } from "@tanstack/react-query";
 import { getWeather } from "./services/weatherService";
+import "./App.css";
 
 import HomePage from "./pages/HomePage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -53,11 +54,16 @@ const { data, isLoading, error} = useQuery({
 
     return (
         
-        <>
+        <div className="app-shell">
 
         <BrowserRouter>
-          <Routes>
+          <nav className="top-nav" aria-label="Main navigation">
+            <Link to="/">Home</Link>
+            <Link to="/favorites">Favorites</Link>
+            <Link to={city ? `/city/${city}` : "/"}>City</Link>
+          </nav>
 
+          <Routes>
             <Route path="/" element={<HomePage />} />
 
             <Route path="/favorites" element={
@@ -70,49 +76,61 @@ const { data, isLoading, error} = useQuery({
 
           </Routes>
 
-          <Link to="/">Home</Link>
-
-        <Link to="/favorites">Favorites</Link>
-
-        <Link to="/city">City</Link>
-
         </BrowserRouter>
 
-        
+        <main className="weather-layout">
+          <section className="hero-panel">
+            <Header />
+            <p className="hero-copy">
+              Clean forecasts, favorite cities, and the next few days at a glance.
+            </p>
 
-          <Header />
+            <div className="search-panel">
+              <SearchInput
+            
+              />
 
-          <SearchInput
-            />
+              <button className="ghost-button" onClick={toggleFavorite}>
+                Save city
+              </button>
+            </div>
+          </section>
 
-           <button onClick={toggleFavorite}>
-            favorite
-           </button>
+          <section className="content-grid">
+            <div className="primary-column">
+              <WeatherCard
+                weather={data}
+                loading={isLoading}
+                error={error?.message ?? ""}
+              />
 
-           <button
-           >Search</button>
+              <section className="forecast-section">
+                <div className="section-heading">
+                  <span>5 day rhythm</span>
+                  <h2>Forecast</h2>
+                </div>
 
-           <FavoritesList
-           
-           />
+                <ForecastList
+                  forecast={
+                    data?.list
+                      ?.filter((item:any) =>
+                        item.dt_txt.includes("12:00:00")
+                      )
+                      .slice(0, 5) ?? []
+                  }
+                />
+              </section>
+            </div>
 
-          <WeatherCard
-  weather={data}
-  loading={isLoading}
-  error={error?.message ?? ""}
-/>
-
-          <RecentSearches 
-          searches={recentSearches}/>
-
-          <ForecastList
-  forecast={
-    data?.list
-      ?.filter((item:any) =>
-        item.dt_txt.includes("12:00:00")
-      )
-      .slice(0, 5) ?? []
-  } /> </>
+            <aside className="side-column">
+              <FavoritesList />
+              <RecentSearches
+                searches={recentSearches}
+              />
+            </aside>
+          </section>
+        </main>
+      </div>
 
 
     );

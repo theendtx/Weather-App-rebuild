@@ -1,6 +1,9 @@
 function Loader() {
     return (
-        <p>Loading...</p>
+        <div className="status-card">
+            <span className="loader-dot" />
+            <p>Loading...</p>
+        </div>
     )
 }
 

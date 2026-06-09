@@ -4,6 +4,6 @@ export default function CityPage() {
     const { name } = useParams();
 
     return (
-        <h1>{name}</h1>
+        <p className="route-badge">{name}</p>
     );
 }

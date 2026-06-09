@@ -1,9 +1,10 @@
 type Props = {
     children: React.ReactNode;
+    className?: string;
 };
 
-export default function Card({ children }: Props){
+export default function Card({ children, className = "" }: Props){
     return (
-        <div>{children}</div>
+        <div className={`card ${className}`.trim()}>{children}</div>
     )
 }

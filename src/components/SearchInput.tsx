@@ -1,23 +1,26 @@
 import { useForm } from "react-hook-form";
+import type { Dispatch, SetStateAction } from "react";
 
 type Props = {
     city: string;
-    setCity: React.Dispatch<React.SetStateAction<string>>;
+    setCity: Dispatch<SetStateAction<string>>;
 };
 
-function SearchInput({city, setCity}: Props) {
+export default function SearchInput({city, setCity}: Props) {
     const {
   register,
   handleSubmit
 } = useForm();
 
 function onSubmit(data:any) {
-    console.log(data);
+    setCity(data.city.trim());
 }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="search-form" onSubmit={handleSubmit(onSubmit)}>
   <input
+    aria-label="City"
+    placeholder={city || "Search a city"}
     {...register("city", {
       required: "City is required"
     })}
@@ -28,5 +31,3 @@ function onSubmit(data:any) {
         
     );
 }
-
-export default SearchInput;

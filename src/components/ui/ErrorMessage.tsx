@@ -4,6 +4,8 @@ type Props = {
 
 export default function ErrorMessage({ message}: Props) {
     return (
-        <p>{message}</p>
+        <div className="status-card error-card">
+            <p>{message}</p>
+        </div>
     )
 }
