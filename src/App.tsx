@@ -19,7 +19,7 @@ import RecentSearches from "./components/RecentSearches";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-    const [city ] = useState("");
+    const [city, setCity] = useState("");
 
     const recentSearches =
   useWeatherStore(
@@ -86,9 +86,7 @@ const { data, isLoading, error} = useQuery({
             </p>
 
             <div className="search-panel">
-              <SearchInput
-            
-              />
+              <SearchInput city={city} setCity={setCity} />
 
               <button className="ghost-button" onClick={toggleFavorite}>
                 Save city
